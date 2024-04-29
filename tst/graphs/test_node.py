@@ -1,9 +1,18 @@
 from src.graphs.node import Node
 
 class TestNode:
-    def test_create_node(self):
+    def test_create_node_only_value(self):
         node = Node(3)
         assert node.value == 3
+
+    def test_repr(self):
+        node = Node(3)
+        assert repr(node) == "3"
+
+    def test_create_node_with_children(self):
+        node = Node(3, [])
+        assert node.value == 3
+        assert node.children == []
 
     def test_equal_nodes(self):
         node_1 = Node(3)

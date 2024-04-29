@@ -1,4 +1,4 @@
-from src.stable_matching import get_stable_matches
+from src.stable_matching.stable_matching import get_stable_matches
 
 class TestStableMatching:
     def test_get_stable_matches_simple_preferences(self):
