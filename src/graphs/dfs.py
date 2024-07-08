@@ -20,3 +20,15 @@ def dfs_recursive(node):
     parents = {node: None}
     dfs_recursive_helper(node, parents)
     return parents
+
+def dfs_recursive_topo_sort(node):
+    def dfs_topo_recursive_helper(node, visited, topological_ordering):
+        visited.add(node)
+        for child in node.children:
+            if child not in visited:
+                dfs_topo_recursive_helper(child, visited, topological_ordering)
+        topological_ordering.append(node)
+    topological_ordering = []
+    visited = set()
+    dfs_topo_recursive_helper(node, visited, topological_ordering)
+    return topological_ordering[::-1]
