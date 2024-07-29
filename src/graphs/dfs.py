@@ -1,5 +1,24 @@
 from collections import deque
 
+def dfs_get_cycles(node):
+    parents = {node: None}
+    queue = deque([node])
+    cycles = []
+    while queue:
+        node = queue.popleft()
+        for child in node.children:
+            if child not in parents:
+                parents[child] = node
+                queue.append(child)
+            else:
+                cycle = [child]
+                current_node = node
+                while current_node != child:
+                    cycle.append(current_node)
+                    current_node = parents[current_node]
+                cycles.append(cycle)
+    return cycles
+
 def dfs_iterative(node):
     parents = {node: None}
     queue = deque([node])

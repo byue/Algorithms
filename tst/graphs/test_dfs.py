@@ -1,7 +1,39 @@
-from src.graphs.dfs import dfs_iterative, dfs_recursive, dfs_recursive_topo_sort
+from src.graphs.dfs import dfs_iterative, dfs_recursive, dfs_recursive_topo_sort, dfs_get_cycles
 from src.graphs.node import Node
 
 class TestDFS:
+    def test_dfs_get_cycles(self):
+        graph = Node("A", [
+                    Node("B", [
+                        Node("B")
+                    ]),
+                    Node("C"),
+                    Node("D", [
+                        Node("E"),
+                        Node("F", [
+                            Node("H"),
+                            Node("I", [
+                                Node("A")
+                            ])
+                        ]),
+                        Node("G", [
+                            Node("J"),
+                            Node("K", [
+                                Node("G")
+                            ]),
+                        ])
+                    ]),
+                ])
+
+        expected_cycles = [
+            [Node("B")],
+            [Node("A"), Node("I"), Node("F"), Node("D")],
+            [Node("G"), Node("K")],
+        ]
+
+        actual_cycles = dfs_get_cycles(graph)
+        assert actual_cycles == expected_cycles
+
     def test_dfs_recursive_topo_sort(self):
         graph = Node("A", [
                     Node("B"),
@@ -32,7 +64,6 @@ class TestDFS:
         ]
 
         actual_topo_sorting = dfs_recursive_topo_sort(graph)
-        print(actual_topo_sorting)
         assert actual_topo_sorting == expected_topo_sorting
 
     def test_dfs_iterative(self):
