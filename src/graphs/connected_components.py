@@ -1,18 +1,18 @@
 from collections import deque
 
-def connected_components(nodes):
+def connected_components(graph):
     visited = set()
     connected_components = []
-    for node in nodes:
-        if node not in visited:
+    for root_node in graph:
+        if root_node not in visited:
             connected_component = []
-            queue = deque([node])
+            queue = deque([root_node])
             while queue:
                 node = queue.popleft()
+                visited.add(node)
                 connected_component.append(node)
-                for child in node.children:
+                for child in graph.neighbors(node):
                     if child not in visited:
-                        visited.add(child)
                         queue.append(child)
             connected_components.append(connected_component)
     return connected_components

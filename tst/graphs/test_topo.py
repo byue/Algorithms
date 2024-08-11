@@ -1,51 +1,26 @@
 from src.graphs.topo import kahn_topo_sort
-from src.graphs.node import Node
+import networkx as nx
 
 class TestTopo:
     def test_kahn_topo_sort_cycles(self):
-        graph = Node("A", [
-                    Node("B", [
-                        Node("B")
-                    ]),
-                    Node("C"),
-                    Node("D", [
-                        Node("E"),
-                        Node("F", [
-                            Node("H"),
-                            Node("I", [
-                                Node("A")
-                            ])
-                        ]),
-                        Node("G", [
-                            Node("J"),
-                            Node("K", [
-                                Node("G")
-                            ]),
-                        ])
-                    ]),
-                ])
+        graph = nx.DiGraph()
+        graph.add_edge("A", "B")
+        graph.add_edge("B", "A")
 
-        expected_cycles = None
-        actual_cycles = kahn_topo_sort([graph])
-        assert actual_cycles == expected_cycles
+        actual_cycles = kahn_topo_sort(graph)
+
+        assert actual_cycles == None
 
     def test_kahn_topo_no_cycles(self):
-        graph = Node("A", [
-                    Node("B", [
-                        Node("E")
-                    ]),
-                    Node("D", [
-                        Node("G")
-                    ]),
-                    Node("F")
-                ])
-        expected_cycles = [
-            Node("A"),
-            Node("B"),
-            Node("D"),
-            Node("F"),
-            Node("E"),
-            Node("G")
-        ]
-        actual_cycles = kahn_topo_sort([graph])
+        graph = nx.DiGraph()
+        graph.add_edge("A", "B")
+        graph.add_edge("B", "E")
+        graph.add_edge("A", "D")
+        graph.add_edge("D", "G")
+        graph.add_edge("A", "F")
+
+        expected_cycles = ["A", "B", "D", "F", "E", "G"]
+
+        actual_cycles = kahn_topo_sort(graph)
+
         assert actual_cycles == expected_cycles

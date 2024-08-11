@@ -1,17 +1,19 @@
 from collections import deque
 
-def bfs(node):
+def bfs(graph):
+    node = next((n for n in graph), None)
     parents = {node: None}
     queue = deque([node])
     while queue:
         node = queue.popleft()
-        for child in node.children:
+        for child in graph.neighbors(node):
             if child not in parents:
                 parents[child] = node
                 queue.append(child)
     return parents
 
-def level_bfs(node):
+def level_bfs(graph):
+    node = next((n for n in graph), None)
     parents = {node: None}
     queue = deque([node])
     levels = []
@@ -19,7 +21,7 @@ def level_bfs(node):
         levels.append(list(queue))
         for _ in range(len(queue)):
             node = queue.popleft()
-            for child in node.children:
+            for child in graph.neighbors(node):
                 if child not in parents:
                     parents[child] = node
                     queue.append(child)
