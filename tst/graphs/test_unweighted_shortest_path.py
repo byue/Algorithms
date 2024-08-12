@@ -7,7 +7,7 @@ class TestUnweightedShortestPath:
         graph = nx.Graph()
         graph.add_node("A")
 
-        actual_parent = bfs(graph)
+        actual_parent = bfs("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "D", "A")
 
@@ -25,7 +25,7 @@ class TestUnweightedShortestPath:
         graph.add_edge("F", "I")
         graph.add_edge("I", "J")
 
-        actual_parent = bfs(graph)
+        actual_parent = bfs("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "Z", "I")
 
@@ -45,7 +45,7 @@ class TestUnweightedShortestPath:
 
         expected_path = ["D", "F", "I"]
 
-        actual_parent = bfs(graph)
+        actual_parent = bfs("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "D", "I")
 

@@ -1,7 +1,6 @@
 from collections import deque
 
-def bfs(graph):
-    node = next((n for n in graph), None)
+def bfs(node, graph):
     parents = {node: None}
     queue = deque([node])
     while queue:
@@ -12,8 +11,7 @@ def bfs(graph):
                 queue.append(child)
     return parents
 
-def level_bfs(graph):
-    node = next((n for n in graph), None)
+def level_bfs(node, graph):
     parents = {node: None}
     queue = deque([node])
     levels = []
@@ -26,4 +24,3 @@ def level_bfs(graph):
                     parents[child] = node
                     queue.append(child)
     return levels, parents
-

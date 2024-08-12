@@ -99,7 +99,7 @@ class TestDFS:
             "J": "I"
         }
 
-        actual_parent = dfs_iterative(graph)
+        actual_parent = dfs_iterative("A", graph)
         assert actual_parent == expected_parent
 
     def test_dfs_recursive(self):
@@ -128,5 +128,5 @@ class TestDFS:
             "J": "I"
         }
 
-        actual_parent = dfs_recursive(graph)
+        actual_parent = dfs_recursive("A", graph)
         assert actual_parent == expected_parent

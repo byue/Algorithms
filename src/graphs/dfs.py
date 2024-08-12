@@ -25,8 +25,7 @@ def dfs_get_all_cycles_undirected(graph):
             dfs(graph, [], seen_in_any_component, set(), node, cycles)
     return list(cycles.values())
 
-def dfs_iterative(graph):
-    node = next((n for n in graph), None)
+def dfs_iterative(node, graph):
     parents = {node: None}
     queue = deque([node])
     while queue:
@@ -37,13 +36,12 @@ def dfs_iterative(graph):
                 queue.append(child)
     return parents
 
-def dfs_recursive(graph):
+def dfs_recursive(node, graph):
     def dfs_recursive_helper(node, parents):
         for child in graph.neighbors(node):
             if child not in parents:
                 parents[child] = node
                 dfs_recursive_helper(child, parents)
-    node = next((n for n in graph), None)
     parents = {node: None}
     dfs_recursive_helper(node, parents)
     return parents

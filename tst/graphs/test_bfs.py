@@ -27,7 +27,7 @@ class TestBFS:
             "J": "I"
         }
 
-        actual_parent = bfs(graph)
+        actual_parent = bfs("A", graph)
         assert actual_parent == expected_parent
 
     def test_level_bfs(self):
@@ -63,6 +63,6 @@ class TestBFS:
             "J": "I"
         }
 
-        actual_levels, actual_parent = level_bfs(graph)
+        actual_levels, actual_parent = level_bfs("A", graph)
         assert actual_levels == expected_levels
         assert actual_parent == expected_parent
