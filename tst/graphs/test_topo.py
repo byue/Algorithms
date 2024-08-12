@@ -2,25 +2,32 @@ from src.graphs.topo import kahn_topo_sort
 import networkx as nx
 
 class TestTopo:
-    def test_kahn_topo_sort_cycles(self):
-        graph = nx.DiGraph()
-        graph.add_edge("A", "B")
-        graph.add_edge("B", "A")
-
-        actual_cycles = kahn_topo_sort(graph)
-
-        assert actual_cycles == None
-
     def test_kahn_topo_no_cycles(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B")
+        graph.add_edge("A", "E")
         graph.add_edge("B", "E")
-        graph.add_edge("A", "D")
-        graph.add_edge("D", "G")
-        graph.add_edge("A", "F")
+        graph.add_edge("E", "F")
+        graph.add_edge("B", "F")
+        graph.add_edge("B", "C")
+        graph.add_edge("F", "C")
+        graph.add_edge("F", "G")
+        graph.add_edge("G", "H")
+        graph.add_edge("H", "C")
+        graph.add_edge("H", "D")
+        graph.add_edge("D", "C")
 
-        expected_cycles = ["A", "B", "D", "F", "E", "G"]
+        expected_topo_sorting = ['A', 'B', 'E', 'F', 'G', 'H', 'D', 'C']
+        actual_topo_sorting = kahn_topo_sort(graph)
+        assert actual_topo_sorting == expected_topo_sorting
 
-        actual_cycles = kahn_topo_sort(graph)
+    def test_kahn_topo_sort_cycle(self):
+        graph = nx.DiGraph()
+        graph.add_edge("A", "B")
+        graph.add_edge("B", "C")
+        graph.add_edge("C", "A")
 
-        assert actual_cycles == expected_cycles
+        expected_topo_sorting = []
+
+        actual_topo_sorting = kahn_topo_sort(graph)
+        assert actual_topo_sorting == expected_topo_sorting

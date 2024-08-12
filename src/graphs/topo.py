@@ -5,13 +5,14 @@ def kahn_topo_sort(graph):
     seen = set()
     for root in graph:
         if root not in seen:
+            seen.add(root)
             queue = deque([root])
             while queue:
                 node = queue.popleft()
-                seen.add(node)
                 for child in graph.neighbors(node):
                     in_degrees[child] += 1
                     if child not in seen:
+                        seen.add(child)
                         queue.append(child)
     queue = deque([node for node, in_degree in in_degrees.items() if in_degree == 0])
     result = []
@@ -23,5 +24,5 @@ def kahn_topo_sort(graph):
             if in_degrees[child] == 0:
                 queue.append(child)
     if len(result) != len(in_degrees):
-        return None
+        return []
     return result
