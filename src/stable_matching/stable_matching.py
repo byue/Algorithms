@@ -1,47 +1,51 @@
-def get_stable_matches(proposer_to_preferences, receiver_to_preferences):
+from collections import deque
+
+def get_stable_matches(proposer_prefs, receiver_prefs):
     """Returns a list of (proposer, receiver) matches given ordered proposer
        and receiver preferences, where index 0 of preferences list is most preferred.
        Runtime is O(N^2) where N is the number of receivers and the number of proposers.
     """
-    proposer_matches = {}
-    receiver_matches = {}
+    # input validation
+    for receivers in proposer_prefs.values():
+        if set(receivers) != receiver_prefs.keys():
+            raise ValueError("Receiver Preference list of proposers must include all receivers")
 
-    # Receivers that proposer has already attempted to propose to.
-    proposals = {proposer: set() for proposer in proposer_to_preferences.keys()}
+    for proposers in receiver_prefs.values():
+        if set(proposers) != proposer_prefs.keys():
+            raise ValueError("Proposer Preference list of receivers must include all proposers")
 
-    # Receivers and proposers that have not been matched
-    free_proposers = {proposer for proposer in proposer_to_preferences.keys()}
-    free_receivers = {receiver for receiver in receiver_to_preferences.keys()}
+    engagements = {}
+    proposer_rank = {}
+    
+    # initialize free proposers, initially all proposers
+    free_proposers = deque([p for p in proposer_prefs.keys()])
 
-    # O(N^2): Precompute proposer to ranking for a receiver for faster ranking lookups.
-    receiver_to_proposer_rankings = {}
-    for receiver, proposers in receiver_to_preferences.items():
-        receiver_to_proposer_rankings[receiver] = {proposer: rank for rank, proposer in enumerate(proposers)}
+    # initialize index of next receiver for each proposer to 0
+    next_receiver = {proposer: 0 for proposer in proposer_prefs.keys()}
 
-    # O(N^2): For each of N proposers have to look through N receivers to find candidate receiver.
+    # receiver to proposer to proposer index (rank), needed to speed up rank comparisions
+    for receiver, preferences in receiver_prefs.items():
+        proposer_rank[receiver] = {proposer: i for i, proposer in enumerate(preferences)}
+    
     while free_proposers:
-        candidate_proposer = next(iter(free_proposers))
-        proposed_receivers = proposals[candidate_proposer]
-        proposer_preferences = proposer_to_preferences[candidate_proposer]
-        candidate_receiver = next(filter(lambda receiver: receiver not in proposed_receivers, proposer_preferences), None)
-        proposer_ranking = receiver_to_proposer_rankings[candidate_receiver]
+        # get the next free proposer
+        new_proposer = free_proposers.popleft()
 
-        proposed_receivers.add(candidate_receiver)
-        if candidate_receiver in free_receivers:
-            # Case 1: Receiver and proposer have not been matched before and matches.
-            proposer_matches[candidate_proposer] = candidate_receiver
-            receiver_matches[candidate_receiver] = candidate_proposer
-            free_proposers.remove(candidate_proposer)
-            free_receivers.remove(candidate_receiver)
+        # get next receiver proposer has not proposed to yet and increment next receiver
+        receiver = proposer_prefs[new_proposer][next_receiver[new_proposer]]
+        next_receiver[new_proposer] += 1
+
+        if receiver not in engagements:
+            # tenatively match new proposer with receiver if receiver is not engaged
+            engagements[receiver] = new_proposer
+        elif proposer_rank[receiver][new_proposer] < proposer_rank[receiver][engagements[receiver]]:
+            # new proposer is more favored by receiver than old proposer, engage receiver with new proposer
+            # and free old proposer
+            old_proposer = engagements[receiver]
+            engagements[receiver] = new_proposer
+            free_proposers.append(old_proposer)
         else:
-            # Case 2: Receiver has been matched before but prefers new proposer to old proposer.
-            # Receiver unmatches with older proposer and matches with new proposer.
-            old_proposer = receiver_matches[candidate_receiver]
-            if proposer_ranking[candidate_proposer] < proposer_ranking[old_proposer]:
-                old_proposer = receiver_matches[candidate_receiver]
-                proposer_matches[candidate_proposer] = candidate_receiver
-                receiver_matches[candidate_receiver] = candidate_proposer
-                free_proposers.remove(candidate_proposer)
-                free_proposers.add(old_proposer)
+            # receiver rejects new proposer, new proposer remains free
+            free_proposers.append(new_proposer)
 
-    return {(proposer, receiver) for proposer, receiver in proposer_matches.items()}
+    return set([(proposer, receiver) for receiver, proposer in engagements.items()])
