@@ -2,6 +2,9 @@
 
 This repository contains a collection of Python implementations of fundamental and advanced algorithms and data structures. It is designed for general-purpose use, including problem-solving, academic learning, and technical interview preparation. The algorithms cover a broad range of topics, from classic data structures to modern techniques, and aim to provide both efficient solutions and clear code examples to enhance your understanding of algorithm design and optimization.
 
+## Prerequisites
+Ensure Python3 is installed.
+
 ## Installation and Running
 
 To get started with the repository, follow these steps:
@@ -11,14 +14,29 @@ To get started with the repository, follow these steps:
    ```bash
    git clone https://github.com/byue/Algorithms.git
    cd Algorithms
+   ```
 
-2. **Install Dependencies and Run Unit Tests**:
-   The make file is setup for Windows/Powershell, edit this for Linux. Dependencies are installed using venv.
+2. **Install Dependencies (venv) and Run Unit Tests**:
+   Install dependencies and run unit tests:
 
    ```bash
    make
+   ```
+
+   Install can be done separately:
+
+   ```bash
+   make install
+   ```
+
+   Running unit tests can be done separately:
+
+   ```bash
+   make test
+   ```
 
 3. **Clean up Build Artifacts**:
+   Delete build artifacts:
 
    ```bash
    make clean
