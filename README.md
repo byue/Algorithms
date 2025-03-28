@@ -50,3 +50,5 @@ The algorithms and data structures concepts in this repository were inspired by 
 - **MIT OpenCourseWare**: The [Introduction to Algorithms](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/video_galleries/lecture-videos/) course as well as the [Design and Analysis of Algorithms](https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/video_galleries/lecture-videos/) course from MIT OpenCourseWare provided key insights and methodologies for this project.
 
 - **University of Washington CSE 421**: The [CSE 421: Algorithms Lecture Notes](https://courses.cs.washington.edu/courses/cse421/24au/) served as another essential reference for the development of algorithmic techniques in this repository.
+
+- **Introduction to Algorithms**, Fourth Edition, by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein. Published by The MIT Press in April 2022. ISBN: 978-0262046305. [Link to MIT Press](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/).
