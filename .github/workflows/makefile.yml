@@ -12,6 +12,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+    permissions:
+      contents: read  # Read access to the repository content (e.g., to fetch code)
+      actions: read   # Read access to workflow actions
     env:
       PYTHON_VERSION: '3.12'  # Set Python version as a global environment variable
 
