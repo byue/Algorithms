@@ -1,9 +1,9 @@
-from src.graphs.mst.prim.lazy_prim import get_mst
+from src.graphs.mst.prim.eager_prim import get_mst
 import networkx as nx
 import math
 
-class TestLazyPrim:
-    def test_lazy_prim(self):
+class TestEagerPrim:
+    def test_eager_prim(self):
         graph = nx.Graph()
         graph.add_edge(0, 7, weight=0.16)
         graph.add_edge(2, 3, weight=0.17)
