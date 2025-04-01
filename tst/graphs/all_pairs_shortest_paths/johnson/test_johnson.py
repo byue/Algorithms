@@ -1,17 +1,17 @@
-from src.graphs.johnson import get_all_pairs_shortest_paths
+import src.graphs.all_pairs_shortest_paths.johnson.johnson as johnson
 import networkx as nx
 
 class TestDjikstra:
-    def test_all_pairs_shortest_paths_negative_cycle(self):
+    def test_get_apsp_negative_cycle(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("B", "A", weight=-5)
 
-        actual_result = get_all_pairs_shortest_paths(graph)
+        actual_result = johnson.get_apsp(graph)
 
         assert actual_result is None
 
-    def test_all_pairs_shortest_paths_acyclic(self):
+    def test_get_apsp_acyclic(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-2)
         graph.add_edge("C", "A", weight=4)
@@ -34,6 +34,6 @@ class TestDjikstra:
                            'Z': ({'A': float('inf'), 'B': float('inf'), 'C': float('inf'), 'X': 1, 'Y': -4, 'Z': 0},
                                  {'Z': None, 'X': 'Z', 'Y': 'Z'})}
 
-        actual_result = get_all_pairs_shortest_paths(graph)
+        actual_result = johnson.get_apsp(graph)
 
         assert actual_result == expected_result
