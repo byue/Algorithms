@@ -1,6 +1,6 @@
 from src.graphs.topo import kahn_topo_sort
 
-def get_weighted_shortest_paths(source, graph):
+def get_sssp(source, graph):
     distances = {node: 0 if node == source else float('inf') for node in graph}
     parents = {source: None}
     topo_order_nodes = kahn_topo_sort(graph)
