@@ -1,7 +1,7 @@
 import src.graphs.single_source_shortest_paths.bellman_ford.bellman_ford as bellman_ford
 import src.graphs.single_source_shortest_paths.djikstra.djikstra as djikstra
 
-def get_all_pairs_shortest_paths(graph):
+def get_apsp(graph):
     virtual_graph = graph.copy()
     for node in graph:
         virtual_graph.add_edge('Virtual', node, weight=0)
