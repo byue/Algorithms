@@ -1,8 +1,8 @@
-from src.graphs.single_source_shortest_paths.djikstra import get_weighted_shortest_paths
+import src.graphs.single_source_shortest_paths.djikstra.djikstra as djikstra
 import networkx as nx
 
 class TestDjikstra:
-    def test_get_weighted_shortest_paths_acyclic(self):
+    def test_get_sssp_acyclic(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("A", "E", weight=7)
@@ -34,12 +34,12 @@ class TestDjikstra:
                             "H": "G",
                             "D": "H"}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = djikstra.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
     
-    def test_get_weighted_shortest_paths_positive_cycles(self):
+    def test_get_sssp_positive_cycles(self):
         graph = nx.DiGraph()
         graph.add_edge("S", "A", weight=10)
         graph.add_edge("S", "C", weight=3)
@@ -64,7 +64,7 @@ class TestDjikstra:
                             "C": "S",
                             "B": "A"}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = djikstra.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances

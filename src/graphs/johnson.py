@@ -1,5 +1,5 @@
 from src.graphs.bellman_ford import get_weighted_shortest_paths as bellman_ford
-from src.graphs.single_source_shortest_paths.djikstra import get_weighted_shortest_paths as djikstra
+import src.graphs.single_source_shortest_paths.djikstra.djikstra as djikstra
 
 def get_all_pairs_shortest_paths(graph):
     virtual_graph = graph.copy()
@@ -12,7 +12,7 @@ def get_all_pairs_shortest_paths(graph):
     for parent, child, data in transformed_graph.edges(data=True):
         data['weight'] += distances[parent]
         data['weight'] -= distances[child]
-    djikstra_result = {node: djikstra(node, transformed_graph) for node in transformed_graph}
+    djikstra_result = {node: djikstra.get_sssp(node, transformed_graph) for node in transformed_graph}
     for source in djikstra_result:
         for destination in djikstra_result[source][0]:
             djikstra_result[source][0][destination] -= distances[source]

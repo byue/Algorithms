@@ -1,15 +1,17 @@
 from collections import deque
 
-def bfs(node, graph):
+def get_sssp(node, graph):
     parents = {node: None}
+    distances = {node: 0}
     queue = deque([node])
     while queue:
         node = queue.popleft()
         for child in graph.neighbors(node):
             if child not in parents:
                 parents[child] = node
+                distances[child] = distances[node] + 1
                 queue.append(child)
-    return parents
+    return distances, parents
 
 def level_bfs(node, graph):
     parents = {node: None}

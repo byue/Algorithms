@@ -5,7 +5,7 @@ from fibonacci_heap_mod import Fibonacci_heap
 # V dequeue-min's each taking O(Log(V))
 # E decrease-key's each taking O(1) with Fibonacci Heap
 # Space: O(V), pq only has 1 entry per node, parent and shortest path dictionaries are only 1 entry per node
-def get_weighted_shortest_paths(source, graph):
+def get_sssp(source, graph):
     shortest_path_distance = {current_node: 0 if current_node == source else float('inf') for current_node in graph}
     parent_node = {source: None}
     pq = Fibonacci_heap()
