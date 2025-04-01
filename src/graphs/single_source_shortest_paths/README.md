@@ -1,81 +1,65 @@
-# Dijkstra's Algorithm for Single Source Shortest Paths
+# Single Source Shortest Path (SSSP) Algorithms
 
 ## Overview
-Dijkstra's algorithm is a **greedy algorithm** used to find the **shortest path from a single source node to all other nodes** in a weighted graph. It guarantees the shortest path in graphs with **non-negative weights** and is widely used in real-world applications like GPS navigation and network routing.
+Single Source Shortest Path (**SSSP**) algorithms compute the shortest paths from a **single source node** to all other nodes in a graph. The choice of algorithm depends on the properties of the graph, including whether it is **weighted or unweighted**, **acyclic or general**, and whether it contains **negative weights**.
 
 ---
 
-## **Theory of Dijkstra's Algorithm**
-Dijkstra's algorithm works by iteratively expanding the shortest-known path from the source node. It maintains a **priority queue (min-heap)** that always expands the **closest unvisited node**, ensuring that each node's shortest path is determined before moving to farther nodes.
+## **SSSP Algorithms and Their Properties**
 
-### **Key Steps:**
-1. Assign an initial distance of **0** to the source node and **infinity (∞)** to all other nodes.
-2. Use a **priority queue (min-heap)** to always expand the node with the smallest known distance.
-3. For each neighboring node, update its shortest distance if a **better path** is found.
-4. Repeat until all nodes have been visited.
-
----
-
-## **Time Complexity**
-The runtime of Dijkstra's algorithm depends on the data structure used for the priority queue:
-
-| Priority Queue Type  | Time Complexity  |
-|----------------------|-----------------|
-| **Binary Heap** (`heapq`) | \( O((V + E) \log V) \) |
-| **Fibonacci Heap**  | \( O(V \log V + E) \) |
-
-- **V** = Number of vertices (nodes)
-- **E** = Number of edges  
-- Using a **Fibonacci Heap** results in better performance for **dense graphs**, but binary heaps are simpler to implement.
-
-### **Space Complexity**
-- **O(V + E)** (storing graph data and priority queue)
+| **Restrictions**      | **Graph Type**      | **Weights**        | **Algorithm Name**    | **Running Time O(·)**  |
+|----------------------|-------------------|-------------------|----------------------|-----------------------|
+| **General Unweighted** | Any               | Unweighted        | **BFS**              | **O(V + E)**         |
+| **DAG**              | Directed Acyclic   | Any               | **DAG Relaxation**   | **O(V + E)**         |
+| **General Any**      | Any                | Any               | **Bellman-Ford**     | **O(V · E)**         |
+| **General Non-negative** | Any            | Non-negative      | **Dijkstra**         | **O(V log V + E)**   |
 
 ---
 
-## **Comparison with Prim’s Algorithm**
-Dijkstra’s and Prim’s algorithms are similar in that they both use a **greedy approach** and a **priority queue**. However, they solve different problems:
+## **Algorithm Descriptions**
 
-| Feature  | **Dijkstra’s Algorithm** | **Prim’s Algorithm** |
-|----------|-------------------------|---------------------|
-| **Purpose** | Finds shortest paths from a **single source** | Finds the **minimum spanning tree** (MST) |
-| **Graph Type** | Weighted graphs with **non-negative** weights | Weighted **undirected** graphs |
-| **Approach** | Expands paths based on the **shortest known distance** | Expands edges based on the **minimum weight** |
-| **Priority Queue** | Stores **nodes with distances** | Stores **edges with weights** |
-| **Result** | A shortest-path tree rooted at the source | A spanning tree connecting all nodes |
+### **1. Breadth-First Search (BFS)**
+- **Use Case:** Graphs with **unweighted** edges.
+- **Approach:** Expands nodes layer by layer using a **queue**.
+- **Time Complexity:** **O(V + E)**
+- **Why It Works:** Since all edges have the same weight, the shortest path is the path with the fewest edges.
 
-### **Key Difference:**  
-- **Dijkstra’s algorithm** finds the shortest path **to all nodes** starting from a single source.
-- **Prim’s algorithm** constructs a **tree** connecting all nodes with the minimum total edge weight.
+### **2. DAG Relaxation**
+- **Use Case:** **Directed Acyclic Graphs (DAGs)** with any weights.
+- **Approach:** Uses **topological sorting** followed by **relaxation** in topological order.
+- **Time Complexity:** **O(V + E)**
+- **Why It Works:** Since there are no cycles, a topological order guarantees that all nodes are processed in a valid dependency sequence.
+
+### **3. Bellman-Ford Algorithm**
+- **Use Case:** **Any graph**, including those with **negative weights**.
+- **Approach:** Performs **|V| - 1 iterations**, relaxing all edges in each iteration.
+- **Time Complexity:** **O(V · E)**
+- **Why It Works:** The shortest path has at most **V - 1 edges**, so iterating **V - 1 times** ensures correctness.
+- **Bonus:** Can detect **negative weight cycles**.
+
+### **4. Dijkstra's Algorithm**
+- **Use Case:** **Any graph with non-negative weights**.
+- **Approach:** Uses a **priority queue (min-heap)** to always expand the **closest unvisited node**.
+- **Time Complexity:** **O(V log V + E)** (with binary heap)  
+- **Why It Works:** Expanding nodes greedily ensures that each node’s shortest path is determined before moving to farther nodes.
 
 ---
 
-## **When to Use Dijkstra's Algorithm**
-| **Scenario** | **Best Choice** | **Reason** |
-|-------------|---------------|------------|
-| **Finding shortest paths from a single source** | Dijkstra’s Algorithm | Provides shortest paths to all nodes efficiently |
-| **Graph has only positive weights** | Dijkstra’s Algorithm | Works correctly without modifications |
-| **Graph contains negative weights** | Bellman-Ford Algorithm | Dijkstra does not handle negative weights |
-| **Finding a minimum-cost connection for all nodes** | Prim’s Algorithm | Builds an MST instead of shortest paths |
-
----
-
-## **Applications of Dijkstra’s Algorithm**
-Dijkstra’s algorithm is widely used in:
-- **Navigation Systems (GPS & Maps):**  
-  - Computes the shortest driving or walking routes.
-- **Network Routing (Internet & Telecommunications):**  
-  - Optimizes packet forwarding and routing protocols.
-- **Robotics & AI Pathfinding:**  
-  - Guides autonomous robots and AI agents through optimal paths.
-- **Operations Research:**  
-  - Solves logistics and supply chain routing problems.
-- **Video Game Pathfinding:**  
-  - Used in A* search for AI movement in games.
+## **Choosing the Right Algorithm**
+| **Graph Type** | **Edge Weights** | **Best Algorithm** |
+|--------------|----------------|------------------|
+| **Unweighted Graphs** | No weights | **BFS** |
+| **DAGs (Acyclic Graphs)** | Any weights | **DAG Relaxation** |
+| **General Graphs (with possible negative weights)** | Any | **Bellman-Ford** |
+| **General Graphs (no negative weights)** | Non-negative only | **Dijkstra** |
 
 ---
 
 ## **Conclusion**
-Dijkstra’s algorithm is a fundamental algorithm for shortest path problems in graphs. It efficiently finds the shortest path from a single source to all other nodes using a **greedy** approach and a **priority queue**. Compared to Prim’s algorithm, which finds the **minimum spanning tree**, Dijkstra’s algorithm is the preferred choice when finding the **shortest routes** between points in a network.
+The choice of SSSP algorithm depends on the properties of the graph:
+- **BFS** is ideal for unweighted graphs.
+- **DAG Relaxation** leverages topological sorting for efficiency.
+- **Bellman-Ford** handles negative weights and detects negative cycles.
+- **Dijkstra’s Algorithm** is the fastest for graphs **without negative weights**.
 
-Understanding Dijkstra’s and Prim’s algorithms helps in optimizing network design, navigation systems, and various computational problems in computer science.
+Understanding these algorithms helps optimize shortest path computations in real-world applications like **navigation, networking, and AI pathfinding**.

@@ -1,4 +1,4 @@
-from src.graphs.bfs import bfs
+import src.graphs.single_source_shortest_paths.bfs.bfs as bfs
 from src.graphs.unweighted_shortest_path import unweighted_shorted_path
 import networkx as nx
 
@@ -7,7 +7,7 @@ class TestUnweightedShortestPath:
         graph = nx.Graph()
         graph.add_node("A")
 
-        actual_parent = bfs("A", graph)
+        _, actual_parent = bfs.get_sssp("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "D", "A")
 
@@ -25,7 +25,7 @@ class TestUnweightedShortestPath:
         graph.add_edge("F", "I")
         graph.add_edge("I", "J")
 
-        actual_parent = bfs("A", graph)
+        _, actual_parent = bfs.get_sssp("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "Z", "I")
 
@@ -45,7 +45,7 @@ class TestUnweightedShortestPath:
 
         expected_path = ["D", "F", "I"]
 
-        actual_parent = bfs("A", graph)
+        _, actual_parent = bfs.get_sssp("A", graph)
 
         actual_path = unweighted_shorted_path(actual_parent, "D", "I")
 

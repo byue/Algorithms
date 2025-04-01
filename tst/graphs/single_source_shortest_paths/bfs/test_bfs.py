@@ -1,4 +1,4 @@
-from src.graphs.bfs import bfs, level_bfs
+import src.graphs.single_source_shortest_paths.bfs.bfs as bfs
 import networkx as nx
 
 class TestBFS:
@@ -27,8 +27,22 @@ class TestBFS:
             "J": "I"
         }
 
-        actual_parent = bfs("A", graph)
+        expected_distances = {
+            "A": 0,
+            "B": 1,
+            "C": 1,
+            "D": 1,
+            "E": 2,
+            "F": 2,
+            "G": 2,
+            "H": 3,
+            "I": 3,
+            "J": 4
+        }
+
+        actual_distances, actual_parent = bfs.get_sssp("A", graph)
         assert actual_parent == expected_parent
+        assert actual_distances == expected_distances
 
     def test_level_bfs(self):
         graph = nx.Graph()
@@ -63,6 +77,6 @@ class TestBFS:
             "J": "I"
         }
 
-        actual_levels, actual_parent = level_bfs("A", graph)
+        actual_levels, actual_parent = bfs.level_bfs("A", graph)
         assert actual_levels == expected_levels
         assert actual_parent == expected_parent
