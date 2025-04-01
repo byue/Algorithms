@@ -1,4 +1,4 @@
-from src.graphs.connected_components import connected_components
+from src.graphs.connected_components.cc_bfs import connected_components
 import networkx as nx
 
 class TestConnectedComponents:
