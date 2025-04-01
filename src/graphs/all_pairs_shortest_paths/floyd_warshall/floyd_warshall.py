@@ -5,13 +5,13 @@ def get_apsp(graph):
     dist = {u: {v: float('inf') for v in graph} for u in graph}
     parent = {u: {} for u in graph}
 
-    # Initialize distances with given edge weights
+    # Initialize distances and parents
     for u in graph:
-        dist[u][u] = 0  # Distance to self is 0
+        dist[u][u] = 0
         parent[u][u] = None
-        for v in graph.neighbors(u):
-            dist[u][v] = graph[u][v]['weight']
-            parent[u][v] = u  # Initialize parent
+    for u, v, data in graph.edges(data=True):
+        dist[u][v] = graph[u][v]['weight']
+        parent[u][v] = u
 
     # Floyd-Warshall core algorithm
     for k in graph:

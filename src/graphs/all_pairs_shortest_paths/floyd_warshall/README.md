@@ -1,53 +1,74 @@
-# Floyd-Warshall Algorithm
+# Floyd-Warshall Algorithm for All-Pairs Shortest Paths
 
 ## Overview
-The **Floyd-Warshall algorithm** is a dynamic programming technique used to compute the shortest paths between all pairs of vertices in a weighted graph. Unlike algorithms that find shortest paths from a single source, Floyd-Warshall efficiently determines the shortest distances between every pair of nodes, making it a powerful solution for **all-pairs shortest path (APSP) problems**.
 
-## Theory
-Floyd-Warshall relies on the principle of **incremental improvement** by considering whether an intermediate vertex provides a shorter path between two other vertices. It systematically updates a distance matrix, checking whether paths that pass through an intermediate vertex yield a shorter total distance.
+The **Floyd-Warshall algorithm** is an algorithm for finding the **shortest paths** in a **weighted graph** with **positive or negative edge weights** (but no negative weight cycles). It solves the **All-Pairs Shortest Path (APSP)** problem, which involves computing the shortest paths between every pair of nodes in a graph.
 
-The core recurrence relation for updating distances is:
+### Purpose
+The algorithm is used to compute the shortest paths between all pairs of nodes in a graph. It works efficiently for dense graphs or when all-pairs shortest path information is required for subsequent computations.
 
-\[
-d(i, j) = \min(d(i, j), d(i, k) + d(k, j))
-\]
+### Theory
 
-Where:
-- \( d(i, j) \) is the shortest distance from vertex \( i \) to vertex \( j \).
-- \( k \) is an intermediate vertex that we check to see if it provides a shorter path.
+Floyd-Warshall is a **dynamic programming** algorithm that iteratively improves the shortest path estimates between all pairs of vertices in a graph. The core idea is to use an intermediate node `k` to try and improve the shortest path between any two nodes `i` and `j`. If a path from `i` to `j` can be improved by passing through `k`, then the algorithm updates the shortest path between `i` and `j`.
 
-The algorithm iterates over all possible intermediate vertices and updates the shortest known paths accordingly.
+The algorithm proceeds by considering each node in the graph as an intermediate node and checking if any shortest path can be improved by traversing that node.
 
-## Use Cases
-The Floyd-Warshall algorithm is particularly useful in:
-- **Network routing**: Finding the shortest paths between all routers in a network.
-- **Urban traffic analysis**: Computing shortest routes between all intersections in a city.
-- **Flight route optimization**: Finding shortest travel times between all airports.
-- **Transitive closure computation**: Determining reachability in graphs.
+### Recurrence Relation
 
-## Algorithm Runtime
-The time complexity of Floyd-Warshall is **O(V³)**, where \( V \) is the number of vertices. The algorithm operates on a **distance matrix** and iterates over all pairs of vertices for each intermediate vertex.
+The recurrence used in the Floyd-Warshall algorithm is:
 
-- **Time Complexity:** \( O(V^3) \)
-- **Space Complexity:** \( O(V^2) \) (stores shortest path distances and parent relationships)
+`dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`
 
-## Comparison to Other APSP Algorithms
-| Algorithm        | Time Complexity  | Best for...                          |
-|-----------------|-----------------|--------------------------------------|
-| **Floyd-Warshall** | \( O(V^3) \) | Dense graphs, simple implementation |
-| **Dijkstra (V times)** | \( O(V^2 + VE) \) with simple PQ, \( O(V \log V + E) \) with Fibonacci heap | Sparse graphs, non-negative weights |
-| **Johnson’s Algorithm** | \( O(V^2 \log V + VE) \) | Large graphs with some negative weights |
-| **Bellman-Ford (V times)** | \( O(V^2E) \) | Detecting negative weight cycles |
+This means that for each pair of nodes `i` and `j`, the shortest path between `i` and `j` is the minimum of its current distance (`dist[i][j]`) and the sum of the shortest path from `i` to `k` and from `k` to `j`.
 
-### When to Use Floyd-Warshall?
-- **Use Floyd-Warshall when** the graph is **dense** (i.e., many edges) or when you need a **simpler implementation**.
-- **Avoid Floyd-Warshall for very large graphs**, as its **O(V³) complexity** makes it slower than alternatives like Johnson’s Algorithm for sparse graphs.
+### Base Case
 
-## Limitations
-- Floyd-Warshall does **not work with negative-weight cycles**; it can detect them but not compute shortest paths in such cases.
-- It is inefficient for graphs with large vertex counts due to its **cubic time complexity**.
+- For each node `i`, the shortest distance from `i` to itself is `0`:  
+  `dist[i][i] = 0` for all `i`.
+- The initial distances between directly connected nodes are initialized as the edge weights between them, and the distance for other pairs is set to infinity (`∞`).
 
-## Summary
-Floyd-Warshall is an elegant, matrix-based approach for computing **all-pairs shortest paths** in a graph. It is particularly valuable for problems where **graph size is moderate**, and a **simple, uniform approach** is preferred over more complex algorithms.
+### Algorithm Steps
 
----
+1. **Initialization**:  
+   - Set `dist[i][j] = ∞` for all pairs `(i, j)` unless there is an edge between them, in which case set `dist[i][j]` to the weight of the edge.
+   - Set `dist[i][i] = 0` for all nodes `i` (distance from a node to itself is always 0).
+
+2. **Iterate through all possible intermediate nodes `k`**:  
+   For each node `k` in the graph, update the distance `dist[i][j]` for all pairs `(i, j)` by checking if passing through node `k` gives a shorter path.
+
+3. **Repeat**:  
+   Repeat the above step for every node `k` in the graph.
+
+4. **Termination**:  
+   After all intermediate nodes have been considered, the matrix `dist` will contain the shortest distances between all pairs of nodes.
+
+### What do `i`, `j`, and `k` represent?
+
+- `i`: The starting node for a path.
+- `j`: The destination node for a path.
+- `k`: The intermediate node that is considered in the path from `i` to `j`.
+
+The algorithm iterates through all nodes and tries to find a shorter path from node `i` to node `j` by potentially using `k` as an intermediate node.
+
+## Runtime Complexity
+
+The time complexity of the Floyd-Warshall algorithm is:
+
+- **Time complexity**: `O(V^3)`  
+  Where `V` is the number of vertices in the graph.  
+  The algorithm involves three nested loops over all nodes, leading to a cubic runtime.
+
+- **Space complexity**: `O(V^2)`  
+  The algorithm uses a `V x V` matrix to store the shortest path distances between every pair of vertices.
+
+## Applications
+
+- **Graph analysis**: Floyd-Warshall is useful for analyzing dense graphs where all-pairs shortest path information is needed.
+- **Network routing**: It can be used to find the shortest routes between all pairs of routers in a network.
+- **Transitive closure**: In some cases, Floyd-Warshall can be used to compute the transitive closure of a directed graph, i.e., finding whether there is a path between every pair of nodes.
+- **Flight and transport scheduling**: Floyd-Warshall is suitable for applications such as transportation and circuit layout where you need to find the shortest route or time between any two locations in the system.
+
+## Conclusion
+
+Floyd-Warshall is a fundamental algorithm for solving the All-Pairs Shortest Path problem in graphs, especially when negative edge weights are involved. Its cubic time complexity makes it suitable for graphs with fewer vertices or when the graph is dense, but it is generally outperformed by other algorithms like Dijkstra or Johnson’s algorithm for sparse graphs.
+
