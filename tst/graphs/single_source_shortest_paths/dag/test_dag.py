@@ -1,8 +1,8 @@
-from src.graphs.dag_relaxation_shortest_paths import get_weighted_shortest_paths
+import src.graphs.single_source_shortest_paths.dag.dag as dag
 import networkx as nx
 
 class TestDagRelaxationShortestPaths:
-    def test_get_weighted_shortest_paths_cycle(self):
+    def test_get_sssp_cycle(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("B", "A", weight=-5)
@@ -13,12 +13,12 @@ class TestDagRelaxationShortestPaths:
 
         expected_parents = {"A": None}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = dag.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
 
-    def test_get_weighted_shortest_paths(self):
+    def test_get_sssp(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("A", "E", weight=7)
@@ -50,7 +50,7 @@ class TestDagRelaxationShortestPaths:
                             "H": "G",
                             "D": "H"}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = dag.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
