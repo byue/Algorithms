@@ -1,98 +1,81 @@
-# Lazy Prim vs. Eager Prim for Minimum Spanning Tree (MST)
+# Dijkstra's Algorithm for Single Source Shortest Paths
 
 ## Overview
-Lazy Prim and Eager Prim are two variations of **Prim’s Algorithm**, which is used to find the **Minimum Spanning Tree (MST)** of a weighted, connected, and undirected graph. An MST is a subset of edges that connects all nodes in the graph with the minimum possible total weight, ensuring there are no cycles.
-
-These two approaches differ in how they manage the priority queue (PQ) that selects the next edge to be added to the MST.
+Dijkstra's algorithm is a **greedy algorithm** used to find the **shortest path from a single source node to all other nodes** in a weighted graph. It guarantees the shortest path in graphs with **non-negative weights** and is widely used in real-world applications like GPS navigation and network routing.
 
 ---
 
-## **Theory of Prim's Algorithm**
-Prim’s algorithm starts with an arbitrary node and grows the MST by **adding the smallest edge** that connects an unvisited node to the existing MST. 
+## **Theory of Dijkstra's Algorithm**
+Dijkstra's algorithm works by iteratively expanding the shortest-known path from the source node. It maintains a **priority queue (min-heap)** that always expands the **closest unvisited node**, ensuring that each node's shortest path is determined before moving to farther nodes.
 
-- It relies on a **priority queue** (heap) to efficiently retrieve the smallest edge.
-- The key difference between **Lazy Prim** and **Eager Prim** lies in **how edges are managed** in the priority queue.
-
----
-
-## **Lazy Prim's Algorithm**
-### **How It Works**
-1. Start from any node and initialize a priority queue (PQ) with all edges from this node.
-2. While the PQ is not empty:
-   - Remove the smallest edge.
-   - If the destination node is already visited, skip it.
-   - Otherwise, add the node to the MST and push all its edges into the PQ.
-3. Repeat until all nodes are in the MST.
-
-### **Time Complexity:**  
-- **O(E log E)** (since all edges are added to the PQ, even outdated ones)  
-- Uses a **binary heap** for priority queue operations.
-
-### **Space Complexity:**  
-- **O(E + V)** (stores all edges in the PQ)
-
-### **Pros:**
-- Simple to implement  
-- Works well for sparse graphs  
-
-### **Cons:**
-- Processes outdated edges, leading to redundant work  
-- Higher space complexity  
+### **Key Steps:**
+1. Assign an initial distance of **0** to the source node and **infinity (∞)** to all other nodes.
+2. Use a **priority queue (min-heap)** to always expand the node with the smallest known distance.
+3. For each neighboring node, update its shortest distance if a **better path** is found.
+4. Repeat until all nodes have been visited.
 
 ---
 
-## **Eager Prim's Algorithm**
-### **How It Works**
-1. Start with any node and initialize a priority queue with **only the best edge for each node**.
-2. While the PQ is not empty:
-   - Remove the smallest edge.
-   - If the destination node is already in the MST, ignore it.
-   - Otherwise, add it to the MST and update the PQ with only **better edges** leading to unvisited nodes.
-3. Repeat until all nodes are included.
+## **Time Complexity**
+The runtime of Dijkstra's algorithm depends on the data structure used for the priority queue:
 
-### **Time Complexity:**  
-- **O(E + V log V)** (more efficient since it maintains only the best edge per node)  
-- Uses a **Fibonacci Heap** for efficient **decrease-key** operations.
+| Priority Queue Type  | Time Complexity  |
+|----------------------|-----------------|
+| **Binary Heap** (`heapq`) | \( O((V + E) \log V) \) |
+| **Fibonacci Heap**  | \( O(V \log V + E) \) |
 
-### **Space Complexity:**  
-- **O(V)** (only stores one edge per node in the PQ)
+- **V** = Number of vertices (nodes)
+- **E** = Number of edges  
+- Using a **Fibonacci Heap** results in better performance for **dense graphs**, but binary heaps are simpler to implement.
 
-### **Pros:**
-- More memory-efficient  
-- Faster for dense graphs due to efficient updates  
-
-### **Cons:**
-- More complex implementation  
-- Requires **Fibonacci Heap**, which is not natively available in many programming languages  
+### **Space Complexity**
+- **O(V + E)** (storing graph data and priority queue)
 
 ---
 
-## **Comparison Table**
-| Algorithm  | Time Complexity       | Space Complexity  | PQ Type         | Key Difference |
-|------------|----------------------|------------------|-----------------|-----------------|
-| **Lazy Prim**  | \( O(E \log E) \)  | \( O(E + V) \)  | Binary Heap | Stores all edges in PQ (even outdated ones) |
-| **Eager Prim** | \( O(E + V \log V) \) | \( O(V) \)  | Fibonacci Heap | Maintains only the best edge per node in PQ |
+## **Comparison with Prim’s Algorithm**
+Dijkstra’s and Prim’s algorithms are similar in that they both use a **greedy approach** and a **priority queue**. However, they solve different problems:
+
+| Feature  | **Dijkstra’s Algorithm** | **Prim’s Algorithm** |
+|----------|-------------------------|---------------------|
+| **Purpose** | Finds shortest paths from a **single source** | Finds the **minimum spanning tree** (MST) |
+| **Graph Type** | Weighted graphs with **non-negative** weights | Weighted **undirected** graphs |
+| **Approach** | Expands paths based on the **shortest known distance** | Expands edges based on the **minimum weight** |
+| **Priority Queue** | Stores **nodes with distances** | Stores **edges with weights** |
+| **Result** | A shortest-path tree rooted at the source | A spanning tree connecting all nodes |
+
+### **Key Difference:**  
+- **Dijkstra’s algorithm** finds the shortest path **to all nodes** starting from a single source.
+- **Prim’s algorithm** constructs a **tree** connecting all nodes with the minimum total edge weight.
 
 ---
 
-## **When to Use Each Algorithm**
+## **When to Use Dijkstra's Algorithm**
 | **Scenario** | **Best Choice** | **Reason** |
 |-------------|---------------|------------|
-| **Small or sparse graphs** | Lazy Prim | Simple implementation, handles fewer edges |
-| **Dense graphs** | Eager Prim | More efficient due to decrease-key optimization |
-| **Memory constraints** | Eager Prim | Uses only **O(V)** space vs. **O(E + V)** in Lazy Prim |
-| **No access to Fibonacci Heap** | Lazy Prim | Uses standard binary heap implementations |
+| **Finding shortest paths from a single source** | Dijkstra’s Algorithm | Provides shortest paths to all nodes efficiently |
+| **Graph has only positive weights** | Dijkstra’s Algorithm | Works correctly without modifications |
+| **Graph contains negative weights** | Bellman-Ford Algorithm | Dijkstra does not handle negative weights |
+| **Finding a minimum-cost connection for all nodes** | Prim’s Algorithm | Builds an MST instead of shortest paths |
 
 ---
 
-## **Applications of Prim's Algorithm**
-Prim’s algorithm (and its variations) are widely used in:
-- **Network Design**: Laying out **minimum-cost spanning networks** for power grids, roads, and communication networks.
-- **Cluster Analysis**: Constructing **minimum spanning trees** in machine learning and data clustering.
-- **Approximation Algorithms**: Used in solving the **Travelling Salesman Problem (TSP)**.
-- **Computer Graphics**: Creating **graph-based structures** in visual computing.
+## **Applications of Dijkstra’s Algorithm**
+Dijkstra’s algorithm is widely used in:
+- **Navigation Systems (GPS & Maps):**  
+  - Computes the shortest driving or walking routes.
+- **Network Routing (Internet & Telecommunications):**  
+  - Optimizes packet forwarding and routing protocols.
+- **Robotics & AI Pathfinding:**  
+  - Guides autonomous robots and AI agents through optimal paths.
+- **Operations Research:**  
+  - Solves logistics and supply chain routing problems.
+- **Video Game Pathfinding:**  
+  - Used in A* search for AI movement in games.
 
 ---
 
 ## **Conclusion**
-Lazy Prim and Eager Prim both solve the MST problem efficiently. Lazy Prim is easier to implement but processes redundant edges, while Eager Prim is more memory-efficient and faster for dense graphs. **Choosing the right algorithm depends on the graph structure, available resources, and implementation constraints.**
+Dijkstra’s algorithm is a fundamental algorithm for shortest path problems in graphs. It efficiently finds the shortest path from a single source to all other nodes using a **greedy** approach and a **priority queue**. Compared to Prim’s algorithm, which finds the **minimum spanning tree**, Dijkstra’s algorithm is the preferred choice when finding the **shortest routes** between points in a network.
+
+Understanding Dijkstra’s and Prim’s algorithms helps in optimizing network design, navigation systems, and various computational problems in computer science.
