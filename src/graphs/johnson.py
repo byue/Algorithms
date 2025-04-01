@@ -1,11 +1,11 @@
-from src.graphs.bellman_ford import get_weighted_shortest_paths as bellman_ford
+import src.graphs.single_source_shortest_paths.bellman_ford.bellman_ford as bellman_ford
 import src.graphs.single_source_shortest_paths.djikstra.djikstra as djikstra
 
 def get_all_pairs_shortest_paths(graph):
     virtual_graph = graph.copy()
     for node in graph:
         virtual_graph.add_edge('Virtual', node, weight=0)
-    distances, _ = bellman_ford('Virtual', virtual_graph)
+    distances, _ = bellman_ford.get_sssp('Virtual', virtual_graph)
     if not distances:
         return None
     transformed_graph = graph.copy()

@@ -1,8 +1,8 @@
-from src.graphs.bellman_ford import get_weighted_shortest_paths
+import src.graphs.single_source_shortest_paths.bellman_ford.shortest_path_faster_algorithm as spfa
 import networkx as nx
 
 class TestBellmanFord:
-    def test_get_weighted_shortest_paths_negative_cycle(self):
+    def test_get_sssp_negative_cycle(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("B", "A", weight=-5)
@@ -12,12 +12,12 @@ class TestBellmanFord:
 
         expected_parents = None
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = spfa.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
 
-    def test_get_weighted_shortest_paths_acyclic(self):
+    def test_get_sssp_acyclic(self):
         graph = nx.DiGraph()
         graph.add_edge("A", "B", weight=-5)
         graph.add_edge("A", "E", weight=7)
@@ -49,12 +49,12 @@ class TestBellmanFord:
                             "H": "G",
                             "D": "H"}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = spfa.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
 
-    def test_get_weighted_shortest_paths_positive_cycles(self):
+    def test_get_sssp_positive_cycles(self):
         graph = nx.DiGraph()
         graph.add_edge("S", "A", weight=10)
         graph.add_edge("S", "E", weight=8)
@@ -81,7 +81,7 @@ class TestBellmanFord:
                             "C": "A",
                             "B": "C"}
 
-        actual_distances, actual_parents = get_weighted_shortest_paths(source, graph)
+        actual_distances, actual_parents = spfa.get_sssp(source, graph)
 
         assert actual_parents == expected_parents
         assert actual_distances == expected_distances
