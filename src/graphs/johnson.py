@@ -1,5 +1,5 @@
 from src.graphs.bellman_ford import get_weighted_shortest_paths as bellman_ford
-from src.graphs.djikstra.djikstra import get_weighted_shortest_paths as djikstra
+from src.graphs.single_source_shortest_paths.djikstra import get_weighted_shortest_paths as djikstra
 
 def get_all_pairs_shortest_paths(graph):
     virtual_graph = graph.copy()
