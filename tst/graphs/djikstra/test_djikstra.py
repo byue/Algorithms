@@ -1,4 +1,4 @@
-from src.graphs.djikstra import get_weighted_shortest_paths
+from src.graphs.djikstra.djikstra import get_weighted_shortest_paths
 import networkx as nx
 
 class TestDjikstra:
