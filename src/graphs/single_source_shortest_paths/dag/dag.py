@@ -1,9 +1,9 @@
-from src.graphs.topo import kahn_topo_sort
+from src.graphs.topological_sort.kahn import topo_sort
 
 def get_sssp(source, graph):
     distances = {node: 0 if node == source else float('inf') for node in graph}
     parents = {source: None}
-    topo_order_nodes = kahn_topo_sort(graph)
+    topo_order_nodes = topo_sort(graph)
     for node in topo_order_nodes:
         for child in graph.neighbors(node):
             candidate_distance = distances[node] + graph[node][child]['weight']
