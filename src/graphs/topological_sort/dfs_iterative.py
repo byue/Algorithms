@@ -12,7 +12,7 @@ def topo_sort(graph, validate_cycles=True):
 
                 if color[node] == "WHITE":
                     color[node] = "GREY"
-                    for child in graph.neighbors(node):
+                    for child in reversed(list(graph.neighbors(node))):
                         if color[child] == "GREY" and validate_cycles:
                             return deque()
                         if color[child] == "WHITE":
