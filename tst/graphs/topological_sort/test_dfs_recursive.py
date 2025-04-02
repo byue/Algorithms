@@ -1,5 +1,6 @@
-from src.graphs.topological_sort.topo_dfs import topo_sort
+from src.graphs.topological_sort.dfs_recursive import topo_sort
 import networkx as nx
+from collections import deque
 
 class TestTopoDfs:
 
@@ -18,7 +19,7 @@ class TestTopoDfs:
         graph.add_edge("H", "D")
         graph.add_edge("D", "C")
 
-        expected_topo_sorting = ['A', 'B', 'E', 'F', 'G', 'H', 'D', 'C']
+        expected_topo_sorting = deque(['A', 'B', 'E', 'F', 'G', 'H', 'D', 'C'])
         actual_topo_sorting = topo_sort(graph)
         assert actual_topo_sorting == expected_topo_sorting
 
@@ -28,7 +29,7 @@ class TestTopoDfs:
         graph.add_edge("B", "C")
         graph.add_edge("C", "A")
 
-        expected_topo_sorting = []
+        expected_topo_sorting = deque()
 
         actual_topo_sorting = topo_sort(graph)
         assert actual_topo_sorting == expected_topo_sorting
